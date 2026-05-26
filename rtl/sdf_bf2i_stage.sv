@@ -77,39 +77,25 @@ module sdf_bf2i_stage #(
     assign dout_im = phase_sel ? y0_im : delay_out_im;
 
     // ----------------------------------------------------------------
-    // Feedback shift register — DELAY depth, combinational output
+    // Feedback delay — sdf_feedback_delay (combinational output)
     //
-    // sr[0] <= delay_in  (at posedge)
-    // sr[i] <= sr[i-1]   (shift chain)
-    // delay_out = sr[DELAY-1]  (combinational read — no output register)
-    //
-    // Data written at posedge P reaches sr[DELAY-1] after posedge
-    // P+DELAY-1, giving DELAY cycles of latency (write at end of
-    // cycle C, available during cycle C+DELAY).
+    // DELAY-depth shift register with combinational read from sr[DELAY-1].
+    // en = 1'b1: shifts unconditionally every clock.
+    // In the feedback loop the effective latency is DELAY cycles
+    // (DELAY-1 SR propagation + 1 write-at-posedge boundary).
     // ----------------------------------------------------------------
-    logic signed [DATA_W-1:0] sr_re [0:DELAY-1];
-    logic signed [DATA_W-1:0] sr_im [0:DELAY-1];
-
-    assign delay_out_re = sr_re[DELAY-1];
-    assign delay_out_im = sr_im[DELAY-1];
-
-    integer i;
-
-    always_ff @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            for (i = 0; i < DELAY; i = i + 1) begin
-                sr_re[i] <= '0;
-                sr_im[i] <= '0;
-            end
-        end else begin
-            sr_re[0] <= delay_in_re;
-            sr_im[0] <= delay_in_im;
-            for (i = 1; i < DELAY; i = i + 1) begin
-                sr_re[i] <= sr_re[i-1];
-                sr_im[i] <= sr_im[i-1];
-            end
-        end
-    end
+    sdf_feedback_delay #(
+        .DATA_W (DATA_W),
+        .DELAY  (DELAY)
+    ) u_fbdelay (
+        .clk    (clk),
+        .rst_n  (rst_n),
+        .en     (1'b1),
+        .din_re (delay_in_re),
+        .din_im (delay_in_im),
+        .dout_re(delay_out_re),
+        .dout_im(delay_out_im)
+    );
 
     // ----------------------------------------------------------------
     // Valid / sync shift register — DELAY+1 depth, combinational output

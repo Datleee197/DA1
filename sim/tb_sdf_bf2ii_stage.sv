@@ -114,12 +114,12 @@ module tb_sdf_bf2ii_stage;
 
         for (cycle = 0; cycle < NUM_CYCLES; cycle = cycle + 1) begin
             // Set inputs
-            valid_in  = 1;
-            sync_in   = (cycle == 0) ? 1 : 0;
-            din_re    = 16'(10 * (cycle + 1));
-            din_im    = 16'( 5 * (cycle + 1));
-            phase_sel = tb_cnt[2];
-            rot_sel   = rot_pattern[cycle];
+            valid_in  <= 1;
+            sync_in   <= (cycle == 0) ? 1 : 0;
+            din_re    <= 16'(10 * (cycle + 1));
+            din_im    <= 16'( 5 * (cycle + 1));
+            phase_sel <= tb_cnt[2];
+            rot_sel   <= rot_pattern[cycle];
 
             #1;  // settle
 

@@ -148,10 +148,10 @@ module tb_r22sdf_block_controlled;
         @(posedge clk);
 
         for (cycle = 0; cycle < NUM_CYC; cycle = cycle + 1) begin
-            valid_in = 1;
-            sync_in  = (cycle == 0) ? 1 : 0;
-            din_re   = 16'(10 * (cycle + 1));
-            din_im   = 16'( 5 * (cycle + 1));
+            valid_in <= 1;
+            sync_in  <= (cycle == 0) ? 1 : 0;
+            din_re   <= 16'(10 * (cycle + 1));
+            din_im   <= 16'( 5 * (cycle + 1));
 
             #1; // settle
 

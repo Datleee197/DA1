@@ -110,11 +110,11 @@ module sdf_bf2ii_stage #(
     // Valid / sync shift register — DELAY+1 depth, combinational output
     // Same method as sdf_bf2i_stage.
     // ----------------------------------------------------------------
-    logic [DELAY:0] v_sr;
-    logic [DELAY:0] s_sr;
+    logic [DELAY-1:0] v_sr;
+    logic [DELAY-1:0] s_sr;
 
-    assign valid_out = v_sr[DELAY];
-    assign sync_out  = s_sr[DELAY];
+    assign valid_out = v_sr[DELAY-1];
+    assign sync_out  = s_sr[DELAY-1];
 
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin

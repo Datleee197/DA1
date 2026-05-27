@@ -95,11 +95,11 @@ module tb_sdf_bf2i_stage;
 
         for (cycle = 0; cycle < NUM_CYCLES; cycle = cycle + 1) begin
             // --- Set inputs (combinational, before next posedge) ---
-            valid_in  = 1;
-            sync_in   = (cycle == 0) ? 1 : 0;
-            din_re    = 16'(10 * (cycle + 1));
-            din_im    = 16'd0;
-            phase_sel = tb_cnt[2];
+            valid_in  <= 1;
+            sync_in   <= (cycle == 0) ? 1 : 0;
+            din_re    <= 16'(10 * (cycle + 1));
+            din_im    <= 16'd0;
+            phase_sel <= tb_cnt[2];
 
             #1;  // let combinational outputs settle
 

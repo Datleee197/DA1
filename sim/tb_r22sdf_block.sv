@@ -24,8 +24,8 @@ module tb_r22sdf_block;
     //   +1: BF2II SR must latch BF2I combinational valid at next posedge
     //   = DELAY_I + DELAY_II + 1
     // With CMUL: +1 more for the registered CMUL output
-    localparam int LAT_NOCMUL = DELAY_I + DELAY_II + 1;  // 7
-    localparam int LAT_CMUL   = LAT_NOCMUL + 1;          // 8
+    localparam int LAT_NOCMUL = DELAY_I + DELAY_II;
+    localparam int LAT_CMUL   = DELAY_I + DELAY_II + 1;          // 8
 
     // ----------------------------------------------------------------
     // Clock
@@ -138,14 +138,14 @@ module tb_r22sdf_block;
         //          tw_addr = cnt[3:0] (exercises all 16 ROM entries)
         // ============================================================
         for (cycle = 0; cycle < NUM_CYCLES; cycle = cycle + 1) begin
-            valid_in    = 1;
-            sync_in     = (cycle == 0) ? 1 : 0;
-            din_re      = 16'(10 * (cycle + 1));
-            din_im      = 16'( 5 * (cycle + 1));
-            phase_sel_i = tb_cnt[2];
-            phase_sel_ii= tb_cnt[1];
-            rot_sel     = tb_cnt[2:1];
-            tw_addr     = tb_cnt[3:0];
+            valid_in     <= 1;
+            sync_in      <= (cycle == 0) ? 1 : 0;
+            phase_sel_i  <= tb_cnt[2];
+            phase_sel_ii <= tb_cnt[1];
+            rot_sel      <= {tb_cnt[1], tb_cnt[2]};
+            tw_addr      <= tb_cnt[3:0];
+            din_re       <= 16'(10 * (cycle + 1));
+            din_im       <= 16'( 5 * (cycle + 1));
 
             #1; // settle combinational
 

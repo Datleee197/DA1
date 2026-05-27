@@ -74,10 +74,10 @@ module tb_sdf_bf2ii_stage;
         exp_re[ 5] =  40;  exp_im[ 5] =  20;   // compute: y0=(20+60)/2, (10+30)/2
         exp_re[ 6] =  50;  exp_im[ 6] =  25;   // compute: y0=(30+70)/2, (15+35)/2
         exp_re[ 7] =  60;  exp_im[ 7] =  30;   // compute: y0=(40+80)/2, (20+40)/2
-        exp_re[ 8] = -20;  exp_im[ 8] = -10;   // fill, dly=(-20,-10), rot=0: (-20,-10)
-        exp_re[ 9] = -10;  exp_im[ 9] =  20;   // fill, dly=(-20,-10), rot=1: (im,-re)=(-10,20)
-        exp_re[10] =  20;  exp_im[10] =  10;   // fill, dly=(-20,-10), rot=2: (-re,-im)=(20,10)
-        exp_re[11] =  10;  exp_im[11] = -20;   // fill, dly=(-20,-10), rot=3: (-im,re)=(10,-20)
+        exp_re[ 8] = -20;  exp_im[ 8] = -10;   // fill, dly=(-20,-10), unrotated
+        exp_re[ 9] = -20;  exp_im[ 9] = -10;   // fill, dly=(-20,-10), unrotated
+        exp_re[10] = -20;  exp_im[10] = -10;   // fill, dly=(-20,-10), unrotated
+        exp_re[11] = -20;  exp_im[11] = -10;   // fill, dly=(-20,-10), unrotated
         exp_re[12] = 110;  exp_im[12] =  55;   // compute: y0=(90+130)/2, (45+65)/2
         exp_re[13] = 120;  exp_im[13] =  60;   // compute: y0=(100+140)/2, (50+70)/2
         exp_re[14] = 130;  exp_im[14] =  65;   // compute: y0=(110+150)/2, (55+75)/2

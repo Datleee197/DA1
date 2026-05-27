@@ -21,42 +21,48 @@ def digit_reverse_radix4(n, digits):
 
 def generate_test(test_id, name, x, N=256):
     os.makedirs('sim/test_data', exist_ok=True)
+    num_frames = len(x) // N
     
     # Write input hex
     with open(f'sim/test_data/fft256_in_{test_id}.hex', 'w') as f:
-        for i in range(N):
+        for i in range(len(x)):
             re = to_q15(x[i].real) & 0xFFFF
             im = to_q15(x[i].imag) & 0xFFFF
             f.write(f"{re:04x}_{im:04x}\n")
 
-    # Compute FFT
-    X = np.fft.fft(x)
-
-    # Scale 1/256
-    X_scaled = X / 256.0
+    X_scaled = np.zeros_like(x)
+    for frame in range(num_frames):
+        start = frame * N
+        end = start + N
+        X = np.fft.fft(x[start:end])
+        X_scaled[start:end] = X / 256.0
 
     # Write Natural order
     with open(f'sim/test_data/fft256_out_nat_{test_id}.hex', 'w') as f:
-        for i in range(N):
+        for i in range(len(x)):
             re = to_q15(X_scaled[i].real) & 0xFFFF
             im = to_q15(X_scaled[i].imag) & 0xFFFF
             f.write(f"{re:04x}_{im:04x}\n")
 
     # Write Bit-Reversed order
     with open(f'sim/test_data/fft256_out_br_{test_id}.hex', 'w') as f:
-        for i in range(N):
-            idx = bit_reverse(i, 8)
-            re = to_q15(X_scaled[idx].real) & 0xFFFF
-            im = to_q15(X_scaled[idx].imag) & 0xFFFF
-            f.write(f"{re:04x}_{im:04x}\n")
+        for frame in range(num_frames):
+            start = frame * N
+            for i in range(N):
+                idx = start + bit_reverse(i, 8)
+                re = to_q15(X_scaled[idx].real) & 0xFFFF
+                im = to_q15(X_scaled[idx].imag) & 0xFFFF
+                f.write(f"{re:04x}_{im:04x}\n")
             
     # Write Digit-Reversed order
     with open(f'sim/test_data/fft256_out_dr_{test_id}.hex', 'w') as f:
-        for i in range(N):
-            idx = digit_reverse_radix4(i, 4)
-            re = to_q15(X_scaled[idx].real) & 0xFFFF
-            im = to_q15(X_scaled[idx].imag) & 0xFFFF
-            f.write(f"{re:04x}_{im:04x}\n")
+        for frame in range(num_frames):
+            start = frame * N
+            for i in range(N):
+                idx = start + digit_reverse_radix4(i, 4)
+                re = to_q15(X_scaled[idx].real) & 0xFFFF
+                im = to_q15(X_scaled[idx].imag) & 0xFFFF
+                f.write(f"{re:04x}_{im:04x}\n")
 
 def main():
     N = 256
@@ -92,6 +98,18 @@ def main():
     im_rand = np.random.uniform(-0.1, 0.1, N)
     x7 = re_rand + 1j * im_rand
     generate_test(7, "Random", x7)
+
+    # 8. Random Stress Test (20 frames)
+    re_rand_20 = np.random.uniform(-0.1, 0.1, N * 20)
+    im_rand_20 = np.random.uniform(-0.1, 0.1, N * 20)
+    x8 = re_rand_20 + 1j * im_rand_20
+    generate_test(8, "Random20", x8)
+
+    # 9. Back-to-back (3 frames)
+    re_rand_3 = np.random.uniform(-0.1, 0.1, N * 3)
+    im_rand_3 = np.random.uniform(-0.1, 0.1, N * 3)
+    x9 = re_rand_3 + 1j * im_rand_3
+    generate_test(9, "BackToBack3", x9)
 
 if __name__ == "__main__":
     main()

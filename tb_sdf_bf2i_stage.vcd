@@ -1,0 +1,506 @@
+$date
+	Wed May 27 11:04:48 2026
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module tb_sdf_bf2i_stage $end
+$var wire 1 ! valid_out $end
+$var wire 1 " sync_out $end
+$var wire 16 # dout_re [15:0] $end
+$var wire 16 $ dout_im [15:0] $end
+$var parameter 32 % DATA_W $end
+$var parameter 32 & DELAY $end
+$var parameter 32 ' NUM_CYCLES $end
+$var reg 1 ( clk $end
+$var reg 16 ) din_im [15:0] $end
+$var reg 16 * din_re [15:0] $end
+$var reg 1 + phase_sel $end
+$var reg 1 , rst_n $end
+$var reg 1 - sync_in $end
+$var reg 3 . tb_cnt [2:0] $end
+$var reg 1 / valid_in $end
+$var integer 32 0 cycle [31:0] $end
+$var integer 32 1 errors [31:0] $end
+$scope module dut $end
+$var wire 1 ( clk $end
+$var wire 16 2 delay_out_im [15:0] $end
+$var wire 16 3 delay_out_re [15:0] $end
+$var wire 16 4 din_im [15:0] $end
+$var wire 16 5 din_re [15:0] $end
+$var wire 1 + phase_sel $end
+$var wire 1 , rst_n $end
+$var wire 1 - sync_in $end
+$var wire 1 / valid_in $end
+$var wire 16 6 y1_re [15:0] $end
+$var wire 16 7 y1_im [15:0] $end
+$var wire 16 8 y0_re [15:0] $end
+$var wire 16 9 y0_im [15:0] $end
+$var wire 1 ! valid_out $end
+$var wire 1 " sync_out $end
+$var wire 16 : dout_re [15:0] $end
+$var wire 16 ; dout_im [15:0] $end
+$var wire 16 < delay_in_re [15:0] $end
+$var wire 16 = delay_in_im [15:0] $end
+$var parameter 32 > DATA_W $end
+$var parameter 32 ? DELAY $end
+$var reg 4 @ s_sr [3:0] $end
+$var reg 4 A v_sr [3:0] $end
+$scope module u_bf $end
+$var wire 16 B a_im [15:0] $end
+$var wire 16 C a_re [15:0] $end
+$var wire 16 D b_im [15:0] $end
+$var wire 16 E b_re [15:0] $end
+$var parameter 32 F DATA_W $end
+$var reg 17 G diff_im [16:0] $end
+$var reg 17 H diff_re [16:0] $end
+$var reg 17 I sum_im [16:0] $end
+$var reg 17 J sum_re [16:0] $end
+$var reg 16 K y0_im [15:0] $end
+$var reg 16 L y0_re [15:0] $end
+$var reg 16 M y1_im [15:0] $end
+$var reg 16 N y1_re [15:0] $end
+$upscope $end
+$scope module u_fbdelay $end
+$var wire 1 ( clk $end
+$var wire 16 O din_im [15:0] $end
+$var wire 16 P din_re [15:0] $end
+$var wire 16 Q dout_im [15:0] $end
+$var wire 16 R dout_re [15:0] $end
+$var wire 1 S en $end
+$var wire 1 , rst_n $end
+$var parameter 32 T DATA_W $end
+$var parameter 32 U DELAY $end
+$var integer 32 V i [31:0] $end
+$upscope $end
+$upscope $end
+$scope begin $ivl_for_loop0 $end
+$var integer 32 W k [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b100 U
+b10000 T
+b10000 F
+b100 ?
+b10000 >
+b10000 '
+b100 &
+b10000 %
+$end
+#0
+$dumpvars
+b10000 W
+b100 V
+1S
+b0 R
+b0 Q
+b0 P
+b0 O
+b0 N
+b0 M
+b0 L
+b0 K
+b0 J
+b0 I
+b0 H
+b0 G
+b0 E
+b0 D
+b0 C
+b0 B
+b0 A
+b0 @
+b0 =
+b0 <
+b0 ;
+b0 :
+b0 9
+b0 8
+b0 7
+b0 6
+b0 5
+b0 4
+b0 3
+b0 2
+b0 1
+bx 0
+0/
+b0 .
+0-
+0,
+0+
+b0 *
+b0 )
+0(
+b0 $
+b0 #
+0"
+0!
+$end
+#5000
+b100 V
+1(
+#10000
+0(
+#15000
+b100 V
+1(
+#20000
+0(
+#25000
+b100 V
+1,
+1(
+#30000
+0(
+#35000
+b1010 <
+b1010 P
+b1111111111111011 6
+b1111111111111011 N
+b101 8
+b101 L
+b11111111111110110 H
+b1010 J
+b1010 *
+b1010 5
+b1010 E
+1-
+1/
+b100 V
+b0 0
+1(
+#40000
+0(
+#45000
+b10100 <
+b10100 P
+b1111111111110110 6
+b1111111111110110 N
+b1010 8
+b1010 L
+b11111111111101100 H
+b10100 J
+b1 @
+b1 A
+b10100 *
+b10100 5
+b10100 E
+0-
+b100 V
+b1 0
+b1 .
+1(
+#50000
+0(
+#55000
+b11110 <
+b11110 P
+b1111111111110001 6
+b1111111111110001 N
+b1111 8
+b1111 L
+b11111111111100010 H
+b11110 J
+b10 @
+b11 A
+b11110 *
+b11110 5
+b11110 E
+b100 V
+b10 0
+b10 .
+1(
+#60000
+0(
+#65000
+b101000 <
+b101000 P
+b1111111111101100 6
+b1111111111101100 N
+b10100 8
+b10100 L
+b11111111111011000 H
+b101000 J
+b100 @
+b111 A
+b101000 *
+b101000 5
+b101000 E
+b100 V
+b11 0
+b11 .
+1(
+#70000
+0(
+#75000
+1"
+1!
+b11110 #
+b11110 :
+b1111111111101100 <
+b1111111111101100 P
+b11110 8
+b11110 L
+b111100 J
+b1010 3
+b1010 C
+b1010 R
+b1000 @
+b1111 A
+1+
+b110010 *
+b110010 5
+b110010 E
+b100 V
+b100 0
+b100 .
+1(
+#80000
+0(
+#85000
+b101000 #
+b101000 :
+0"
+b101000 8
+b101000 L
+b1010000 J
+b0 @
+b10100 3
+b10100 C
+b10100 R
+b111100 *
+b111100 5
+b111100 E
+b100 V
+b101 0
+b101 .
+1(
+#90000
+0(
+#95000
+b110010 #
+b110010 :
+b110010 8
+b110010 L
+b1100100 J
+b11110 3
+b11110 C
+b11110 R
+b1000110 *
+b1000110 5
+b1000110 E
+b100 V
+b110 0
+b110 .
+1(
+#100000
+0(
+#105000
+b111100 #
+b111100 :
+b111100 8
+b111100 L
+b1111000 J
+b101000 3
+b101000 C
+b101000 R
+b1010000 *
+b1010000 5
+b1010000 E
+b100 V
+b111 0
+b111 .
+1(
+#110000
+0(
+#115000
+b1011010 <
+b1011010 P
+b1111111111101100 #
+b1111111111101100 :
+b1111111111001001 6
+b1111111111001001 N
+b100011 8
+b100011 L
+b11111111110010010 H
+b1000110 J
+b1111111111101100 3
+b1111111111101100 C
+b1111111111101100 R
+0+
+b1011010 *
+b1011010 5
+b1011010 E
+b100 V
+b1000 0
+b0 .
+1(
+#120000
+0(
+#125000
+b1100100 <
+b1100100 P
+b1111111111000100 6
+b1111111111000100 N
+b101000 8
+b101000 L
+b11111111110001000 H
+b1010000 J
+b1100100 *
+b1100100 5
+b1100100 E
+b100 V
+b1001 0
+b1 .
+1(
+#130000
+0(
+#135000
+b1101110 <
+b1101110 P
+b1111111110111111 6
+b1111111110111111 N
+b101101 8
+b101101 L
+b11111111101111110 H
+b1011010 J
+b1101110 *
+b1101110 5
+b1101110 E
+b100 V
+b1010 0
+b10 .
+1(
+#140000
+0(
+#145000
+b1111000 <
+b1111000 P
+b1111111110111010 6
+b1111111110111010 N
+b110010 8
+b110010 L
+b11111111101110100 H
+b1100100 J
+b1111000 *
+b1111000 5
+b1111000 E
+b100 V
+b1011 0
+b11 .
+1(
+#150000
+0(
+#155000
+b1101110 #
+b1101110 :
+b1111111111101100 <
+b1111111111101100 P
+b1111111111101100 6
+b1111111111101100 N
+b1101110 8
+b1101110 L
+b11111111111011000 H
+b11011100 J
+b1011010 3
+b1011010 C
+b1011010 R
+1+
+b10000010 *
+b10000010 5
+b10000010 E
+b100 V
+b1100 0
+b100 .
+1(
+#160000
+0(
+#165000
+b1111000 #
+b1111000 :
+b1111000 8
+b1111000 L
+b11110000 J
+b1100100 3
+b1100100 C
+b1100100 R
+b10001100 *
+b10001100 5
+b10001100 E
+b100 V
+b1101 0
+b101 .
+1(
+#170000
+0(
+#175000
+b10000010 #
+b10000010 :
+b10000010 8
+b10000010 L
+b100000100 J
+b1101110 3
+b1101110 C
+b1101110 R
+b10010110 *
+b10010110 5
+b10010110 E
+b100 V
+b1110 0
+b110 .
+1(
+#180000
+0(
+#185000
+b10001100 #
+b10001100 :
+b10001100 8
+b10001100 L
+b100011000 J
+b1111000 3
+b1111000 C
+b1111000 R
+b10100000 *
+b10100000 5
+b10100000 E
+b100 V
+b1111 0
+b111 .
+1(
+#190000
+0(
+#195000
+b1111111110100110 <
+b1111111110100110 P
+b1000110 #
+b1000110 :
+b1111111110100110 6
+b1111111110100110 N
+b1000110 8
+b1000110 L
+b11111111101001100 H
+b10001100 J
+b1111111111101100 3
+b1111111111101100 C
+b1111111111101100 R
+b100 V
+b10000 0
+b0 .
+1(
+#200000
+0(
+#205000
+b100 V
+1(
+#210000
+0(
+#215000
+b100 V
+1(

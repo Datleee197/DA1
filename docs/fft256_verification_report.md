@@ -1,7 +1,7 @@
 # FFT-256 R2²SDF Hardware Accelerator Verification Report
 
 ## 1. Overview and Files
-This document formally records the functional verification milestone for the FFT-256 Radix-2² Single-path Delay Feedback (R2²SDF) hardware accelerator, validated against a fixed-point `NumPy` golden reference model.
+This document records the RTL functional verification milestone for the FFT-256 Radix-2² Single-path Delay Feedback (R2²SDF) hardware accelerator, validated against a fixed-point `NumPy` golden reference model.
 
 **Key Files Created/Updated:**
 - `rtl/fft256_r22sdf_top.sv`
@@ -33,7 +33,7 @@ Seven single-frame vectors and two multi-frame vectors were executed.
 3. **DC ($x[k]=0.25$)**: Only Bin 0 is active.
 *(These matched BOTH Natural and Bit-Reversed orders because their spectra are completely invariant to index permutation).*
 
-**Discriminatory Vectors (Hard proof of Bit-Reversed order):**
+**Discriminatory Vectors (strong evidence from non-degenerate vectors of Bit-Reversed order):**
 4. **Single Tone Bin 1**: Matched strictly **Bit-Reversed** expected output.
 5. **Single Tone Bin 7**: Matched strictly **Bit-Reversed** expected output.
 6. **Single Tone Bin 31**: Matched strictly **Bit-Reversed** expected output.
@@ -52,7 +52,7 @@ Due to successive 8-stage fixed-point truncation via standard right-shifts, mino
 - **Samples > 2 LSB Error:** 173 / 5120 (~3%)
 - **Samples > 5 LSB Error:** 0 / 5120 (0%)
 
-**Tolerance Classification:** A tight 5 LSB threshold is formally established as the rigid pass/fail boundary for this specific 8-stage pipeline.
+**Tolerance Classification:** A tight 5 LSB threshold is established as the rigid pass/fail boundary for this specific 8-stage pipeline.
 
 ## 6. Streaming Protocol and Back-to-Back Test
 **Continuous Streaming Execution (Test 9: 3 consecutive frames, 768 samples)**
@@ -63,7 +63,7 @@ The hardware verified flawless continuous execution properties:
 - The 3 distinct spectral frames were reconstructed and checked perfectly with 0 elements exceeding the 5 LSB tolerance threshold.
 
 **Pipeline Flush Protocol Requirement:**
-If the R2²SDF module operates on isolated bursts rather than a continuous stream, it is **mandatory** for the driver to keep `valid_in` high and feed dummy zeros into `din` for at least $(N - 1) + 258$ cycles to fully evacuate all shift-register delay lines and validly extract the computation.
+If the R2²SDF module operates on isolated bursts rather than a continuous stream, it is **mandatory** for the driver to follow the isolated burst flush protocol: after 256 real samples, keep `valid_in` high and feed dummy zeros into `din` for at least 258 additional cycles, or run until exactly 256 valid outputs are captured, to fully evacuate all shift-register delay lines and validly extract the computation.
 
 ## 7. Final Regression Verdict
 - Module-level tests: **PASS**
@@ -72,4 +72,4 @@ If the R2²SDF module operates on isolated bursts rather than a continuous strea
 - FFT-256 back-to-back streaming test: **PASS**
 - FFT-256 randomized stress test: **PASS**
 
-**OVERALL ACCELERATOR STATUS: VERIFIED.**
+**OVERALL ACCELERATOR STATUS: FUNCTIONALLY VERIFIED BY RTL SIMULATION**

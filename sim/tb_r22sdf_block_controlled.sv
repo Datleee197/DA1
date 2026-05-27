@@ -43,9 +43,9 @@ module tb_r22sdf_block_controlled;
         .din_re(din_re),.din_im(din_im),
         .valid_out(v1r),.sync_out(s1r),.dout_re(re1r),.dout_im(im1r)
     );
-    assign ps1_i  = cnt1[2];
-    assign ps1_ii = cnt1[1];
-    assign rs1    = {cnt1[2], cnt1[1]};
+    assign ps1_i  = current_cnt1[2];
+    assign ps1_ii = current_cnt1[1];
+    assign rs1    = {1'b0, ~current_cnt1[2]};
 
     // ================================================================
     // Config 2: DELAY_I=4, DELAY_II=2, HAS_CMUL=1, unity
@@ -61,7 +61,7 @@ module tb_r22sdf_block_controlled;
     );
 
     logic v2r, s2r; logic signed [DW-1:0] re2r, im2r;
-    logic [3:0] cnt2;
+    logic [5:0] cnt2; // extended for cmul_idx delay tracking
     logic ps2_i, ps2_ii; logic [1:0] rs2; logic [3:0] tw2;
     r22sdf_block #(
         .DATA_W(DW),.DELAY_I(4),.DELAY_II(2),.HAS_CMUL(1),
@@ -73,10 +73,23 @@ module tb_r22sdf_block_controlled;
         .din_re(din_re),.din_im(din_im),
         .valid_out(v2r),.sync_out(s2r),.dout_re(re2r),.dout_im(im2r)
     );
-    assign ps2_i  = cnt2[2];
-    assign ps2_ii = cnt2[1];
-    assign rs2    = {cnt2[2], cnt2[1]};
-    assign tw2    = cnt2[3:0];
+    assign ps2_i  = current_cnt2[2];
+    assign ps2_ii = current_cnt2[1];
+    assign rs2    = {1'b0, ~current_cnt2[2]};
+    // LAT_NOCMUL is 6. At cycle 6, cnt2 is 6.
+    logic [3:0] cmul_idx2;
+    assign cmul_idx2 = (cnt2 >= 6) ? (cnt2 - 6) : 0;
+    logic [0:0] n3_2; logic [1:0] q2;
+    assign n3_2 = cmul_idx2[0:0];
+    assign q2   = cmul_idx2[2:1];
+    always_comb begin
+        case(q2)
+            2'd0: tw2 = 0;
+            2'd1: tw2 = 4'(n3_2 << 1);
+            2'd2: tw2 = 4'(n3_2);
+            2'd3: tw2 = 4'((n3_2 << 1) + n3_2);
+        endcase
+    end
 
     // ================================================================
     // Config 3: DELAY_I=8, DELAY_II=4, HAS_CMUL=1, tw64.hex
@@ -92,7 +105,7 @@ module tb_r22sdf_block_controlled;
     );
 
     logic v3r, s3r; logic signed [DW-1:0] re3r, im3r;
-    logic [5:0] cnt3;
+    logic [6:0] cnt3; // extended
     logic ps3_i, ps3_ii; logic [1:0] rs3; logic [5:0] tw3;
     r22sdf_block #(
         .DATA_W(DW),.DELAY_I(8),.DELAY_II(4),.HAS_CMUL(1),
@@ -100,14 +113,27 @@ module tb_r22sdf_block_controlled;
     ) ref3 (
         .clk(clk),.rst_n(rst_n),.valid_in(valid_in),.sync_in(sync_in),
         .phase_sel_i(ps3_i),.phase_sel_ii(ps3_ii),
-        .rot_sel(rs3),.tw_addr(tw3[5:0]),
+        .rot_sel(rs3),.tw_addr(tw3),
         .din_re(din_re),.din_im(din_im),
         .valid_out(v3r),.sync_out(s3r),.dout_re(re3r),.dout_im(im3r)
     );
-    assign ps3_i  = cnt3[3];
-    assign ps3_ii = cnt3[2];
-    assign rs3    = {cnt3[3], cnt3[2]};
-    assign tw3    = cnt3[5:0];
+    assign ps3_i  = current_cnt3[3];
+    assign ps3_ii = current_cnt3[2];
+    assign rs3    = {1'b0, ~current_cnt3[3]};
+    // LAT_NOCMUL is 12. At cycle 12, cnt3 is 12.
+    logic [4:0] cmul_idx3;
+    assign cmul_idx3 = (cnt3 >= 12) ? (cnt3 - 12) : 0;
+    logic [1:0] n3_3; logic [1:0] q3;
+    assign n3_3 = cmul_idx3[1:0];
+    assign q3   = cmul_idx3[3:2];
+    always_comb begin
+        case(q3)
+            2'd0: tw3 = 0;
+            2'd1: tw3 = 6'(n3_3 << 1);
+            2'd2: tw3 = 6'(n3_3);
+            2'd3: tw3 = 6'((n3_3 << 1) + n3_3);
+        endcase
+    end
 
     // ================================================================
     // TB counter replication (same logic as r22sdf_block_controlled)
@@ -117,7 +143,7 @@ module tb_r22sdf_block_controlled;
             cnt1 <= '0; cnt2 <= '0; cnt3 <= '0;
         end else if (valid_in) begin
             if (sync_in) begin
-                cnt1 <= '0; cnt2 <= '0; cnt3 <= '0;
+                cnt1 <= 3'd1; cnt2 <= 6'd1; cnt3 <= 7'd1;
             end else begin
                 cnt1 <= cnt1 + 1'b1;
                 cnt2 <= cnt2 + 1'b1;
@@ -125,6 +151,13 @@ module tb_r22sdf_block_controlled;
             end
         end
     end
+
+    logic [2:0] current_cnt1;
+    logic [5:0] current_cnt2;
+    logic [6:0] current_cnt3;
+    assign current_cnt1 = (valid_in && sync_in) ? '0 : cnt1;
+    assign current_cnt2 = (valid_in && sync_in) ? '0 : cnt2;
+    assign current_cnt3 = (valid_in && sync_in) ? '0 : cnt3;
 
     // VCD
     initial begin

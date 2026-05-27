@@ -48,14 +48,26 @@ module sdf_bf2ii_stage #(
     logic signed [DATA_W-1:0] rot_out_re, rot_out_im;
 
     // ----------------------------------------------------------------
+    // Trivial rotator — purely combinational
+    // Applied to din BEFORE the butterfly to compute A - jB
+    // ----------------------------------------------------------------
+    trivial_rotator #(.DATA_W(DATA_W)) u_rot (
+        .rot_sel (rot_sel),
+        .in_re   (din_re),
+        .in_im   (din_im),
+        .out_re  (rot_out_re),
+        .out_im  (rot_out_im)
+    );
+
+    // ----------------------------------------------------------------
     // Butterfly — purely combinational
-    // a = delay_out (stored sample), b = din (current input)
+    // a = delay_out (stored sample), b = rot_out (current input rotated)
     // ----------------------------------------------------------------
     butterfly_radix2_scaled #(.DATA_W(DATA_W)) u_bf (
         .a_re  (delay_out_re),
         .a_im  (delay_out_im),
-        .b_re  (din_re),
-        .b_im  (din_im),
+        .b_re  (rot_out_re),
+        .b_im  (rot_out_im),
         .y0_re (y0_re),
         .y0_im (y0_im),
         .y1_re (y1_re),
@@ -63,32 +75,20 @@ module sdf_bf2ii_stage #(
     );
 
     // ----------------------------------------------------------------
-    // Trivial rotator — purely combinational
-    // Applied to delay_out during fill phase (phase_sel=0).
-    // ----------------------------------------------------------------
-    trivial_rotator #(.DATA_W(DATA_W)) u_rot (
-        .rot_sel (rot_sel),
-        .in_re   (delay_out_re),
-        .in_im   (delay_out_im),
-        .out_re  (rot_out_re),
-        .out_im  (rot_out_im)
-    );
-
-    // ----------------------------------------------------------------
     // Feedback mux — selects what is written into the delay SR
-    //   fill    (phase_sel=0): store incoming sample
-    //   compute (phase_sel=1): store butterfly difference y1
+    //   fill    (phase_sel=0): store incoming sample (unrotated? No, it should be rotated? 
+    //   Wait! If it is stored, it should be unrotated so that it can be used as 'a' later!)
     // ----------------------------------------------------------------
     assign delay_in_re = phase_sel ? y1_re : din_re;
     assign delay_in_im = phase_sel ? y1_im : din_im;
 
     // ----------------------------------------------------------------
     // Output mux — combinational, no output register
-    //   fill    (phase_sel=0): rotated delay output
+    //   fill    (phase_sel=0): delay output
     //   compute (phase_sel=1): butterfly sum y0
     // ----------------------------------------------------------------
-    assign dout_re = phase_sel ? y0_re : rot_out_re;
-    assign dout_im = phase_sel ? y0_im : rot_out_im;
+    assign dout_re = phase_sel ? y0_re : delay_out_re;
+    assign dout_im = phase_sel ? y0_im : delay_out_im;
 
     // ----------------------------------------------------------------
     // Feedback delay — sdf_feedback_delay (combinational output)

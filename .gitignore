@@ -1,0 +1,11 @@
+# Compilation and Simulation outputs
+*.vvp
+*.vcd
+*.log
+sim/build/
+sim/work/
+sim/iverilog.vvp
+
+# Windows details
+Thumbs.db
+Desktop.ini
